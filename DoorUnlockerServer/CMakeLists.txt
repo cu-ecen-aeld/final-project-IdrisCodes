@@ -15,6 +15,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 add_executable(DoorUnlockerServer
   main.cpp
   Resources.qrc
+  secureserver.h secureserver.cpp
+  abstractaction.h
+  debugaction.h debugaction.cpp
 )
 target_link_libraries(DoorUnlockerServer Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network)
 

@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>certs/rootCA.crt</file>
         <file>certs/rpi.crt</file>
-        <file>certs/rpi.csr</file>
         <file>certs/rpi.key</file>
     </qresource>
 </RCC>
