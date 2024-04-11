@@ -107,7 +107,10 @@ void SecureServer::dataReceived()
     qDebug() << "Received: " << clientSocket->readAll();
     clientSocket->write("Ack");
     if(action)
+    {
         action->doAction();
+    }
+    clientSocket->disconnectFromHost();
 }
 
 void SecureServer::error(const QList<QSslError> &err)
