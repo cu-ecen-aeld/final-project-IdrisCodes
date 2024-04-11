@@ -31,9 +31,11 @@ void GpioToggleAction::doAction()
 void GpioToggleAction::setLine()
 {
     qDebug() << "Setting GPIO line";
+    gpiod_line_set_value(relay_line, 1);
 }
 
 void GpioToggleAction::resetLine()
 {
     qDebug() << "Resetting GPIO line";
+    gpiod_line_set_value(relay_line, 0);
 }
