@@ -3,7 +3,8 @@
 
 #include "abstractaction.h"
 #include <QTimer>
-#include <gpiod.h>
+#include <gpiod.hpp>
+
 class GpioToggleAction : public QObject, public AbstractAction
 {
     Q_OBJECT
@@ -12,9 +13,9 @@ private:
     quint8 duration;
     QTimer timer;
 
-    const char *chipname = "gpiochip0";
-    struct gpiod_chip *chip;
-    struct gpiod_line *relay_line;
+    const char *chipname = "/dev/gpiochip0";
+    gpiod::chip *chip;
+    gpiod::line_request* relay_line = nullptr;
 
 public:
     GpioToggleAction(quint8 gpioNumber, quint8 actionDurationSeconds);

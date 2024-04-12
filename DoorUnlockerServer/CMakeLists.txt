@@ -21,7 +21,7 @@ add_executable(DoorUnlockerServer
   gpiotoggleaction.h gpiotoggleaction.cpp
 )
 target_link_libraries(DoorUnlockerServer Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network)
-target_link_libraries(DoorUnlockerServer gpiod)
+target_link_libraries(DoorUnlockerServer gpiodcxx)
 
 include(GNUInstallDirs)
 install(TARGETS DoorUnlockerServer

@@ -1,6 +1,6 @@
 #include "gpiotoggleaction.h"
 #include <QDebug>
-#include <gpiod.h>
+
 
 GpioToggleAction::GpioToggleAction(quint8 gpioNumber, quint8 actionDurationSeconds)
     :gpioLine(gpioNumber), duration(actionDurationSeconds)
@@ -8,16 +8,23 @@ GpioToggleAction::GpioToggleAction(quint8 gpioNumber, quint8 actionDurationSecon
     timer.setSingleShot(true);
     timer.setInterval(duration * 1000);
 
-    chip = gpiod_chip_open_by_name(chipname);
-    relay_line = gpiod_chip_get_line(chip, gpioNumber);
-    gpiod_line_request_output(relay_line, "DoorUnlocker", 0);
+    chip = new gpiod::chip(chipname);
+    auto request = chip->prepare_request();
+    request.set_consumer("DoorUnlocker");
 
+    /* Relay line setup ughhhh*/
+    gpiod::line_settings line_cfg;
+    line_cfg.set_direction(gpiod::line::direction::OUTPUT);
+    line_cfg.set_output_value(gpiod::line::value::INACTIVE);
+    request.add_line_settings(gpioNumber, line_cfg);
+    relay_line = new gpiod::line_request(request.do_request());
 }
 
 GpioToggleAction::~GpioToggleAction()
 {
-    gpiod_line_release(relay_line);
-    gpiod_chip_close(chip);
+    relay_line->release();
+    delete chip;
+
 }
 
 
@@ -31,11 +38,11 @@ void GpioToggleAction::doAction()
 void GpioToggleAction::setLine()
 {
     qDebug() << "Setting GPIO line";
-    gpiod_line_set_value(relay_line, 1);
+    relay_line->set_value(gpioLine, gpiod::line::value::ACTIVE);
 }
 
 void GpioToggleAction::resetLine()
 {
     qDebug() << "Resetting GPIO line";
-    gpiod_line_set_value(relay_line, 0);
+    relay_line->set_value(gpioLine, gpiod::line::value::INACTIVE);
 }
